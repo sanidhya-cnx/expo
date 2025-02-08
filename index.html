@@ -3,13 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(src/pic.jpeg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: 1500px 900px;
+        }
+        .container {
+            margin-top: 100px;
+            position: relative;
+        }
+        h1 {
+            color: #e91e63;
+            text-shadow: 4px 4px 8px #fff;
+        }
+        p {
+            font-size: 18px;
+            color: #fff;
+        }
+        .heart {
+            font-size: 70px;
+            color: red;
+            animation: heartbeat 1s infinite alternate;
+        }
+        @keyframes heartbeat {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        .btn {
+            background-color: #e91e63;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #d81b60;
+        }
+        .btn-no {
+            background-color: #53636a;
+            position: absolute;
+        }
+        .btn-no:hover {
+            background-color: #546e7a;
+        }
+        .reply-area {
+            display: none;
+            margin-top: 20px;
+        }
+        .reply-input {
+            width: 300px;
+            height: 20px;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 50px;
+            border: none;
+        }
+        .submit-btn {
+            background-color: #ff0084;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .user-reply {
+            font-size: 18px;
+            color: green;
+            margin-top: 20px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .popup img {
+            width: 700px;  /* Increased width */
+            height: 560px; /* Increased height to maintain 5:4 aspect ratio */
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add list</h1>
-    <input id="input1" type="text" placeholder="enter name">
-    <input id="input2" type="text" placeholder="registration number">
-    <button id="btn">Add</button>
-    <script src="app.js"></script>
+    <div class="container">
+        <h1>Will You Be My Valentine? ❤️</h1>
+        <p>Dear Khushi Sahu (kuchupuchu 🎀),</p>
+        <p>I've wanted to ask you this for a while. You're amazing, and I would love to spend My Life with you!</p>
+        <p class="heart">❤️</p>
+        <button class="btn" id="yesButton" onclick="showMessage('yes')">Yes!</button>
+        <button class="btn btn-no" id="noButton" onmouseover="moveButton()">No</button>
+        <p id="response" style="display:none; font-size: 20px; color: green; margin-top: 20px;"></p>
+
+        <!-- Reply Area -->
+        <div class="reply-area" id="replyArea">
+            <p>What's your reply?</p>
+            <textarea class="reply-input" id="replyInput" placeholder="Type your reply here..."></textarea><br>
+            <button class="submit-btn" onclick="submitReply()">Submit Reply</button>
+        </div>
+
+        <p id="userReply" class="user-reply" style="display:none;"></p>
+    </div>
+
+    <!-- Overlay and Popup Image -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <h2>Special Surprise!</h2>
+        <img src="src/pic.jpeg" alt="Valentine's Image" id="popupImage">
+        <p>You're amazing!</p>
+    </div>
+
+    <script>
+        function showMessage(answer) {
+            let response = document.getElementById('response');
+            let yesButton = document.getElementById('yesButton');
+            let noButton = document.getElementById('noButton');
+            if (answer === 'yes') {
+                response.innerText = 'I love you kuchupuchu 🎀';
+                response.style.color = 'green';
+                yesButton.style.display = 'none';
+                noButton.style.display = 'none';
+                
+                // Show the reply area
+                document.getElementById('replyArea').style.display = 'block';
+            } else {
+                response.innerText = 'Oh no! Maybe next time 😢';
+                response.style.color = 'red';
+            }
+            response.style.display = 'block';
+        }
+
+        function moveButton() {
+            let button = document.getElementById('noButton');
+            let x = Math.random() * (window.innerWidth - 100);
+            let y = Math.random() * (window.innerHeight - 50);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        }
+
+        function submitReply() {
+            let replyInput = document.getElementById('replyInput').value;
+            let userReply = document.getElementById('userReply');
+            userReply.innerText = `Your reply: ${replyInput}`;
+            userReply.style.display = 'block';
+            document.getElementById('replyArea').style.display = 'none';
+
+            // Check if the reply contains "I love you"
+            if (replyInput.toLowerCase().includes("i love you")) {
+                showPopup();
+            }
+        }
+
+        function showPopup() {
+            // Show the popup and overlay
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+
+            // Change the image every 5 seconds
+            let imageUrls = [
+                "src/pic1.jpg",
+                "src/pic2.jpg",
+                "src/pic3.jpg",
+                "src/pic4.jpg",
+                "src/pic5.jpg",
+                "src/pic6.jpg",
+                "src/pic7.jpg"
+            ];
+            let index = 0;
+            const popupImage = document.getElementById('popupImage');
+            const interval = setInterval(function() {
+                popupImage.src = imageUrls[index];
+                index = (index + 1) % imageUrls.length;
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
